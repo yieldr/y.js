@@ -7,12 +7,21 @@
 </head>
 <body>
   <script type = "text/javascript">
-  </script>
+    (function (window, document, src) {
+      window.y = window.y || {
+        data: {},
+        set: function (name, value) {
+          this.data[name] = value;
+        }
+      };
+      var elem = document.createElement("script");
+      elem.async = !0;
+      elem.src = src;
+      document.head.appendChild(elem);
+    })(window, document, "/y.js");
 
-  <script type = "text/javascript">
-    (function(e,t,n){e.y=e.y||{data:{},set:function(e,t){this.data[e]=t}};var r=t.createElement("script");r.async=!0;r.src=n;t.head.appendChild(r)})(window,document,"../lib/y.js");
-
-    y.set("id", 7);
+    y.set("advertiser_id", 7);
+    y.set("country", "GR");
     y.set("type", 1);
     y.set("basket", 123.00);
     y.set("brand", "Nike");

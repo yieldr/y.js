@@ -7,26 +7,14 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/*! <%= pkg.title || pkg.name %> - v<%= pkg.version %> - ' +
-      '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
-      '<%= pkg.homepage ? "* " + pkg.homepage + "\\n" : "" %>' +
-      '* Copyright (c) <%= grunt.template.today("yyyy") %> <%= pkg.author.name %>;' +
-      ' Licensed <%= _.pluck(pkg.licenses, "type").join(", ") %> */\n',
     // Task configuration.
     concat: {
-      options: {
-        banner: '<%= banner %>',
-        stripBanners: true
-      },
       dist: {
         src: ['lib/{,*/}*.js'],
         dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.js'
       }
     },
     uglify: {
-      options: {
-        banner: '<%= banner %>'
-      },
       dist: {
         src: '<%= concat.dist.dest %>',
         dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.min.js'
@@ -58,13 +46,7 @@ module.exports = function(grunt) {
     }
   });
 
-  
-
-  // Default task.
   grunt.registerTask('default', ['mochaTest', 'concat', 'uglify']);
-
-  // Specific tasks
   grunt.registerTask('test', ['mochaTest']);
   grunt.registerTask('hint', ['jshint']);
-
 };

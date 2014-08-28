@@ -1,18 +1,19 @@
 {
   "name": "y",
   "version": "0.0.0",
-  "homepage" : "http://www.youtube.com/watch?v=cDuG95DXbw8",
+  "homepage" : "yieldr.com",
   "author" : {
-    "name" : "Obi-Wan Kenobi"
+    "name" : "Alex Kalyvitis"
   },
   "dependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-jshint" : "~0.6.0",
-    "grunt-contrib-uglify" : "~0.2.2",
-    "grunt-contrib-concat" : "~0.3.0",
-    "grunt-contrib-watch"  : "~0.4.4",
-    "matchdep"             : "~0.1.2",
-    "grunt-mocha-test" : "~0.7.0"
+    "grunt"               : "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-watch" : "~0.4.4",
+    "matchdep"            : "~0.1.2",
+    "grunt-mocha-test"    : "~0.7.0",
+    "phantom"             : "~0.6.5"
   }
 }
