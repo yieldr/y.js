@@ -26,13 +26,15 @@ module.exports = function(grunt) {
         src: ['lib/{,*/}*.js']
       }
     },
-    mochaTest: {
+    mocha: {
       test: {
+        src: ['test/*.html'],
         options: {
-          reporter: 'nyan'
+          reporter: 'XUnit',
+          run: true
         },
-        src: ['test/*.js']
-      }
+        dest: './test/output/xunit.out'
+      },
     },
     watch: {
       gruntfile: {
@@ -46,7 +48,8 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('default', ['mochaTest', 'concat', 'uglify']);
-  grunt.registerTask('test', ['mochaTest']);
+  grunt.registerTask('default', ['mocha', 'concat', 'uglify']);
+  grunt.registerTask('build', ['concat', 'uglify']);
+  grunt.registerTask('test', ['mocha']);
   grunt.registerTask('hint', ['jshint']);
 };
