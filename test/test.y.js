@@ -8,63 +8,34 @@
 var assert = chai.assert
 
 describe('y', function () {
-    // Cookie
-    describe('cookie', function () {
-
-        it('should be defined', function () {
-            assert.isDefined(y.cookie);
-        })
-
-        describe('get', function () {
-            it('should return null if not set', function () {
-                var cookie = y.cookie.get('ysess');
-                assert.isNull(cookie)
-            })
-        })
-        describe('set', function () {
-            it('should drop a cookie', function () {
-                y.cookie.set('ysess', 'alex', 30, 'alex.com');
-            })
-        })
+    it('should be defined', function() {
+        assert.notEqual(y, undefined)
     })
-
-    describe('url', function () {
-
-        describe('parseQuery', function () {
-            it('should return query parameters as key value pairs', function () {
-                var query = y.url.parseQuery('http://example.com?a=foo&b=bar&c=baz')
-                assert.isObject(query);
-                assert.property(query, 'a');
-                assert.property(query, 'b');
-                assert.property(query, 'c');
-                assert.equal(query.a, 'foo');
-                assert.notEqual(query.b, 'baz');
-            })
-        })
+    it('should be an object', function() {
+        assert.equal(typeof y, "object")
     })
-
-    describe('referrer', function () {
-
-        var domains = {
-            "criteo": "http://criteo.com",
-            "doubleclick": "https://doubleclick.com"
-        };
-
-        describe('name', function() {
-            it('should return the correct name per vendor', function() {
-                for (var name in domains) {
-                    assert.equal(name, y.referrer.name(domains[name]));
-                }
-            })
+    describe('callback', function() {
+        it('should be defined', function() {
+            assert.notEqual(y.callback, undefined)
         })
-
-        describe('isDisplay', function() {
-            it('should return true for display vendors', function() {
-                for (var name in domains) {
-                    assert.isTrue(y.referrer.isDisplay(name));
+        it('should be a function', function() {
+            assert.equal(typeof y.callback, "function")
+        })
+        it('should place piggybacks', function() {
+            var response = {
+                status: 'success',
+                data: {
+                    cases: [1, 2, 3],
+                    html: ['<img src="http://www.google.com/favicon.ico" />'],
+                    script: ['http://code.jquery.com/jquery-1.11.0.min.js'],
+                    image: ['http://www.google.com/favicon.ico'],
+                    iframe: ['http://example.com/']
                 }
-            })
-
+            };
+            y.callback(response);
+            assert.operator(document.getElementsByTagName('img').length, '>=', 2);
+            assert.operator(document.getElementsByTagName('script').length, '>=', 1);
+            assert.operator(document.getElementsByTagName('iframe').length, '>=', 1);
         })
     })
 });
