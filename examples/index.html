@@ -14,10 +14,13 @@
           this.data[name] = value;
         }
       };
-      var elem = document.createElement("script");
-      elem.async = !0;
-      elem.src = src;
-      document.head.appendChild(elem);
+      if (!y.loaded) {
+        var elem = document.createElement("script");
+        elem.async = true;
+        elem.src = src;
+        document.head.appendChild(elem);
+        y.loaded = true;
+      }
     })(window, document, "/y.js");
 
     y.set("advertiser_id", 7);
