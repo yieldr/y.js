@@ -10,6 +10,11 @@ module.exports = function(grunt) {
     // Task configuration.
     concat: {
       dist: {
+        options: {
+          process: function(src) {
+            return src.replace('master', 'v' + grunt.config.data.pkg.version);
+          }
+        },
         src: ['lib/{,*/}*.js'],
         dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.js'
       }
