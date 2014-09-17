@@ -15,11 +15,14 @@ Place the following HTML snippet at the end of your documents body.
       this.data[name] = value;
     }
   };
-  var elem = document.createElement("script");
-  elem.async = !0;
-  elem.src = src;
-  document.head.appendChild(elem);
-})(window, document, "http://cdn.254a.com/static/y.v0.1.0.min.js");
+  if (!y.loaded) {
+    var elem = document.createElement("script");
+    elem.async = true;
+    elem.src = src;
+    document.head.appendChild(elem);
+    y.loaded = true;
+  }
+})(window, document, "//cdn.254a.com/static/y.js");
 
 y.set("foo", "bar");
 y.set("bar", "baz");
