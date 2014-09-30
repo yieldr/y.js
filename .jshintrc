@@ -16,6 +16,5 @@
     "strict": true,
     "trailing": true,
     "smarttabs": true,
-    "white": true,
-    "validthis": true
+    "white": true
 }
