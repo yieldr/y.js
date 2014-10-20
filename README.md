@@ -10,21 +10,22 @@ Place the following HTML snippet at the end of your documents body.
 
 ```html
 <script type="text/javascript">
-(function (window, document, src) {
-  window.y = window.y || {
+(function(y, l, d, r) {
+  y['YieldrTrackingObject'] = r;
+  y[r] = y[r] || {
     data: {},
-    set: function (name, value) {
+    set: function(name, value) {
       this.data[name] = value;
     }
   };
-  if (!y.loaded) {
-    var elem = document.createElement("script");
-    elem.async = true;
-    elem.src = src;
-    document.head.appendChild(elem);
-    y.loaded = true;
+  if (!y[r].loaded) {
+    var s = l.createElement("script");
+    s.async = true;
+    s.src = d;
+    l.head.appendChild(s);
+    y[r].loaded = true;
   }
-})(window, document, "//cdn.254a.com/static/y.js");
+})(window, document, "//cdn.254a.com/static/y.js", "y");
 
 y.set("foo", "bar");
 y.set("bar", "baz");
