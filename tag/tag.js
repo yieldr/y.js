@@ -13,4 +13,4 @@
     l.head.appendChild(s);
     y[r].loaded = true;
   }
-})(window, document, "cdn.254a.com/static/y.js", "y");
+})(window, document, "//cdn.254a.com/static/y.js", "y");
