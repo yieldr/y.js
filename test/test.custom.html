@@ -8,20 +8,23 @@
 <body>
   <div id="mocha"></div>
   <script type="text/javascript">
-    window.y = {
-      data: {},
-      set: function (name, value) {
-        this.data[name] = value;
-      }
-    }
-    y.set("advertiser_id", 7);
-    y.set("country", "GR");
+    (function(y, l, r) {
+      y['YieldrTrackingObject'] = r;
+      y[r] = y[r] || {
+        data: {},
+        set: function(name, value) {
+          this.data[name] = value;
+        }
+      };
+    })(window, document, "yieldr");
+
+    yieldr.set("foo", "bar")
   </script>
   <script src="../lib/y.js"></script>
   <script src="../node_modules/chai/chai.js"></script>
   <script src="../node_modules/mocha/mocha.js"></script>
   <script>mocha.setup('bdd')</script>
-  <script src="test.y.js"></script>
+  <script src="test.custom.js"></script>
   <script>
     mocha.checkLeaks();
     mocha.run();
