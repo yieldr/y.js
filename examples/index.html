@@ -6,6 +6,11 @@
   <title>Yieldr Pixel</title>
 </head>
 <body>
+  <a id="click1" href="http://alexkappa.com">Hijack Me!</a>
+  <a id="click2" href="/home">Hijack Me!</a>
+  <a id="click3" href="relatve">Hijack Me!</a>
+  <a id="click4" href="../back/referencing">Hijack Me!</a>
+
   <script type = "text/javascript">
     (function (y, l, d, r) {
       y['YieldrTrackingObject'] = r;
@@ -13,6 +18,10 @@
         data: {},
         set: function (name, value) {
           this.data[name] = value;
+        },
+        hj: [],
+        hijack: function (name) {
+          this.hj.push(name);
         }
       };
       if (!y[r].loaded) {
@@ -32,6 +41,10 @@
     y.set("category", "Football Boots");
     y.set("product", "FC247 Elastico Finale II Men's Indoor-Competition Football Boot");
     y.set("sku", "580457 - 007");
+    y.hijack("click1")
+    y.hijack("click2")
+    y.hijack("click3")
+    y.hijack("click4")
   </script>
 </body>
 </html>
