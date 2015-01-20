@@ -27,17 +27,8 @@ describe('custom', function () {
         })
         describe('fire', function() {
             it('should have its "yo" parameter set to "yieldr"', function() {
-                yieldr.fire({});
-                var elements = document.getElementsByTagName('script'), found = false;
-                for (var i = elements.length - 1; i >= 0; i--) {
-                    var element = elements[i]
-                    if (element.src) {
-                        if (element.src.indexOf(".254a.com/pixel?yo=yieldr") !== -1) {
-                            found = true;
-                        }
-                    }
-                };
-                assert.equal(found, true);
+                var elem = yieldr.fire({});
+                assert.include(elem.src, 'yo=yieldr');
             })
         })
     })
