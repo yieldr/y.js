@@ -10,12 +10,11 @@
   <script type="text/javascript">
     window.y = {
       data: {},
+      domain: 'localhost',
       set: function (name, value) {
         this.data[name] = value;
       }
     }
-    y.set("advertiser_id", 7);
-    y.set("country", "GR");
   </script>
   <script src="../lib/y.js"></script>
   <script src="../node_modules/chai/chai.js"></script>
@@ -26,5 +25,6 @@
     mocha.checkLeaks();
     mocha.run();
   </script>
+  <a style="display:none;" id="test" href="#">Test events</a>
 </body>
 </html>

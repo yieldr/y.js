@@ -12,13 +12,14 @@
       y['YieldrTrackingObject'] = r;
       y[r] = y[r] || {
         data: {},
+        domain: 'localhost',
         set: function(name, value) {
           this.data[name] = value;
         }
       };
     })(window, document, "yieldr");
 
-    yieldr.set("foo", "bar")
+    yieldr.set("foo", "bar");
   </script>
   <script src="../lib/y.js"></script>
   <script src="../node_modules/chai/chai.js"></script>
