@@ -23,6 +23,13 @@ module.exports = function(grunt) {
       dist: {
         src: '<%= concat.dist.dest %>',
         dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.min.js'
+      },
+      tag: {
+        options: {
+          mangle: false
+        },
+        src: 'tag/tag.js',
+        dest: 'tag/tag.min.js'
       }
     },
     jshint: {
