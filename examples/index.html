@@ -3,35 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Yieldr Pixel</title>
+  <title>Yieldr Pixel - Index</title>
 </head>
 <body>
-  <script type = "text/javascript">
-    (function (y, l, d, r) {
-      y['YieldrTrackingObject'] = r;
-      y[r] = y[r] || {
-        data: {},
-        set: function (name, value) {
-          this.data[name] = value;
-        }
-      };
-      if (!y[r].loaded) {
-        var s = l.createElement("script");
-        s.async = true;
-        s.src = d;
-        l.head.appendChild(s);
-        y[r].loaded = true;
-      }
-    })(window, document, "../lib/y.js", "y");
-
-    y.set("advertiser_id", 7);
-    y.set("country", "GR");
-    y.set("type", 1);
-    y.set("basket", 123.00);
-    y.set("brand", "Nike");
-    y.set("category", "Football Boots");
-    y.set("product", "FC247 Elastico Finale II Men's Indoor-Competition Football Boot");
-    y.set("sku", "580457 - 007");
-  </script>
+  <h1>Yieldr Pixel - Index</h1>
+  <ul>
+    <li><a href="basic/">Basic usage</a></li>
+    <li><a href="event/">Events</a></li>
+    <li><a href="data-layer/">Data Layer</a></li>
+  </ul>
 </body>
 </html>
