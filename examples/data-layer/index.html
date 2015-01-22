@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Yieldr Pixel - Data Layer Example</title>
+</head>
+<body>
+  <h1>Data Layer Example</h1>
+  <p>Some <a href="http://tealium.com/what-is-a-data-layer/">tag managers</a> make data available to trackers via an object called data layer. The Yieldr tracking pixel is able to use such data using the following command.</p>
+  <pre><code>y.set("_dl", [object, mapping]);</code></pre>
+  <p>In this case the object passed as an argument, will be mapped based on the mapping object. Consider the following example:</p>
+  <code>y.set("_dl", [{a: {b: {c: "x"}}}, {foo: "a.b.c"}]);</code>
+  <p>In this case we want to extract a value from the data layer object by following the path <code>"a.b.c"</code>. This value will be sent to the server as <code>foo=x</code>.</p>
+  <script type = "text/javascript">
+    (function(y, l, d, r) {
+      y['YieldrTrackingObject'] = r;
+      y[r] = y[r] || {
+        data: {},
+        set: function(name, value) {
+          this.data[name] = value;
+        }
+      };
+      if (!y[r].loaded) {
+        var s = l.createElement("script");
+        s.async = true;
+        s.src = d;
+        l.head.appendChild(s);
+        y[r].loaded = true;
+      }
+    })(window, document, "../../lib/y.js", "y");
+
+    var dl = {
+      a: {
+        b: {
+          c: "x",
+          d: "y",
+          e: ["foo", "bar"]
+        },
+        bb: function () {
+          return {
+            hello: "world!"
+          };
+        }
+      }
+    };
+
+    y.set("advertiser_id", 7);
+    y.set("_dl", [dl, {foo: "a.b.c", bar: "a.b", baz: "a.bb"}, false]);
+  </script>
+</body>
+</html>

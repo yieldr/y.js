@@ -36,12 +36,54 @@ A valid implementation should should include an `id` or `advertiser_id` paramete
 
 ## API
 
-Upon loading this library the global object `y` is made available which contains some public properties and methods.
+Depending on how you've set up the tag in your site a global object (by default `y`) is available inside the `window`. This can be configured to another name if you run into conflicts.
 
-- `y.set("foo", "bar")` Set property `foo` with value `"bar"`.
+### `y.set("foo", "bar")`
+
+Set property `foo` with value `"bar"`. This is used to specify properties which you want to transmit to the server when initiating tracking calls.
+
+### `y.track()`
+
+Makes a request to the remote server, passing along any parameters discovered by parsing the current window context.
+
+### `y.fire({foo: "bar"})`
+
+Similar to `y.track()` but it will only use the supplied paramaters.
+
+### `y.callback(data)`
+
+This function is usually triggered by a JSON-P response so it's not particularly useful to users. This function is responsible for placing any piggyback pixels from the servers response.
+
+### `y.version`
+
+The version of the library.
+
+### `y.debug`
+
+If set to true, it will output some additional information to the console.
+
+## Data Layer
+
+As of `v0.7.0` it is possible to use values from a tag managers [data layer](http://tealium.com/what-is-a-data-layer) in a flexible way. To use this functionality you must set the `'_dl'` property.
+
+```
+var data = {a: {b: {c: "x"}}},
+    mapping = {foo: "a.b.c"};
+
+y.set("_dl", [data, mapping]); // will extract "x" from data and make it available as "foo".
+```
+
+The values extracted are then "flattened" as best possible so they can be used in query parameters. For example if our mapping was `{foo: "a.b"}` then the result would be the object `{c: "x"}` instead of the string `"x"`. This will be flattened to the key `foo_c` with value `"x"`.
+
+## Events
+
+As of `v0.7.0` you can initiate tracking calls when an event triggers, for example a button was clicked.
+
+```
+y.set("_elem", ["a#submit", "click"]);
 - `y.track()` Makes a request to the remote server, passing along any parameters discovered by parsing the current window context.
 - `y.fire(data)` Similar to `y.track()` but it will only use the supplied paramaters.
-- `y.callback(data)` This function is usually triggered by a JSON-P response.
+```
 - `y.version` Defines the version of the library.
 - `y.debug` If true, it will output some additional information to the console.
 
