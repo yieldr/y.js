@@ -25,5 +25,11 @@ describe('custom', function () {
                 });
             });
         });
+        describe('fire', function () {
+            it('should have its "yo" parameter set to "yieldr"', function () {
+                var elem = yieldr.fire({});
+                assert.include(elem.src, 'yo=yieldr');
+            });
+        });
     });
 });
