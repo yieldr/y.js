@@ -77,6 +77,6 @@ describe('y', function () {
         it('should place a script tag', function () {
             var element = y.fire({'foo': 'bar'});
             assert.include(element.src, 'foo=bar');
-        })
+        });
     });
 });

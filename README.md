@@ -81,11 +81,7 @@ As of `v0.7.0` you can initiate tracking calls when an event triggers, for examp
 
 ```
 y.set("_elem", ["a#submit", "click"]);
-- `y.track()` Makes a request to the remote server, passing along any parameters discovered by parsing the current window context.
-- `y.fire(data)` Similar to `y.track()` but it will only use the supplied paramaters.
 ```
-- `y.version` Defines the version of the library.
-- `y.debug` If true, it will output some additional information to the console.
 
 ## Referrer
 
