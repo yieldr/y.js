@@ -20,11 +20,11 @@ describe('y', function () {
         });
         it('should execute when event triggers', function () {
             var executed = false;
-            y.elem(['a#test', 'click', function (element) {
+            y.elem('a#test', 'click', function (element) {
                 executed = true;
                 assert.include(element.src, 'event=click');
                 assert.include(element.src, 'selector=' + encodeURIComponent('a#test'));
-            }]);
+            });
 
             var event = document.createEvent('HTMLEvents');
             event.initEvent('click');
@@ -38,7 +38,7 @@ describe('y', function () {
             assert.isDefined(y.dl);
         });
         it('should gather data layer properties', function () {
-            y.dl([{a:{b:'x'}}, {foo: 'a.b'}, false]);
+            y.dl({a:{b:'x'}}, {foo: 'a.b'}, false);
 
         });
     });
@@ -76,16 +76,7 @@ describe('y', function () {
         });
         it('should place a script tag', function () {
             var element = y.fire({'foo': 'bar'});
-            var elements = document.getElementsByTagName('script'), found = false;
             assert.include(element.src, 'foo=bar');
-                var element = elements[i]
-                if (element.src) {
-                    if (element.src.indexOf(".254a.com/pixel?foo=bar") !== -1) {
-                        found = true;
-                    }
-        });
-            };
-            assert.equal(found, true);
         })
     });
 });
