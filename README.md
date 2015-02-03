@@ -22,7 +22,7 @@ Place the following HTML snippet at the end of your documents body.
     var s = l.createElement("script");
     s.async = true;
     s.src = d;
-    l.head.appendChild(s);
+    l.getElementsByTagName("head")[0].appendChild(s);
     y[r].loaded = true;
   }
 })(window, document, "//cdn.254a.com/static/y.js", "y");
@@ -81,7 +81,11 @@ As of `v0.7.0` you can initiate tracking calls when an event triggers, for examp
 
 ```
 y.set("_elem", ["a#submit", "click"]);
+- `y.track()` Makes a request to the remote server, passing along any parameters discovered by parsing the current window context.
+- `y.fire(data)` Similar to `y.track()` but it will only use the supplied paramaters.
 ```
+- `y.version` Defines the version of the library.
+- `y.debug` If true, it will output some additional information to the console.
 
 ## Referrer
 
