@@ -22,7 +22,7 @@ Place the following HTML snippet at the end of your documents body.
     var s = l.createElement("script");
     s.async = true;
     s.src = d;
-    l.head.appendChild(s);
+    l.getElementsByTagName("head")[0].appendChild(s);
     y[r].loaded = true;
   }
 })(window, document, "//cdn.254a.com/static/y.js", "y");
