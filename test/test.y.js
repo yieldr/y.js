@@ -32,14 +32,30 @@ describe('y', function () {
 
             assert.isTrue(executed);
         });
+        it('should include element attributes', function () {
+            var executed = false;
+            y.elem('a#test', 'click', function (element) {
+                executed = true;
+                assert.include(element.src, 'event=click');
+                assert.include(element.src, 'selector=' + encodeURIComponent('a#test'));
+                assert.include(element.src, 'attr_id=test');
+                assert.include(element.src, 'attr_href=' + encodeURIComponent('#'));
+            }, ['id', 'href']);
+            var event = document.createEvent('HTMLEvents');
+            event.initEvent('click');
+            document.getElementById('test').dispatchEvent(event); // click it!
+
+            assert.isTrue(executed);
+        });
     });
     describe('dl', function () {
         it('should be defined', function () {
             assert.isDefined(y.dl);
         });
         it('should gather data layer properties', function () {
-            y.dl({a:{b:'x'}}, {foo: 'a.b'}, false);
-
+            y.dl({a:{b:'x'}}, {foo: 'a.b', bar: 'z.y'}, false);
+            assert.property(y.data, 'foo');
+            assert.notProperty(y.data, 'bar'); // because 'z.y' doesn't exist.
         });
     });
     describe('callback', function () {
@@ -62,9 +78,6 @@ describe('y', function () {
             };
             var elements = y.callback(response);
             assert.lengthOf(elements, 4);
-            // assert.operator(document.getElementsByTagName('img').length, '>=', 1);
-            // assert.operator(document.getElementsByTagName('script').length, '>=', 1);
-            // assert.operator(document.getElementsByTagName('iframe').length, '>=', 2);
         });
     })
     describe('fire', function () {
@@ -77,6 +90,6 @@ describe('y', function () {
         it('should place a script tag', function () {
             var element = y.fire({'foo': 'bar'});
             assert.include(element.src, 'foo=bar');
-        })
+        });
     });
 });
