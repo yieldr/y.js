@@ -71,7 +71,7 @@ describe('y', function () {
                 data: {
                     cases: [1, 2, 3],
                     html: ['<img src="http://en.wikipedia.org/favicon.ico" />'],
-                    script: ['http://code.jquery.com/jquery-1.11.0.min.js'],
+                    script: ['http://code.jquery.com/jquery-1.11.2.min.js'],
                     image: ['http://www.google.com/favicon.ico'],
                     iframe: ['http://example.com/']
                 }
