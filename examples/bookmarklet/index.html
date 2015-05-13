@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Yieldr Pixel - Data Layer Example</title>
+</head>
+<body>
+  <h1>Bookmarklet Example</h1>
+  <p>This page demonstrates the use of a browser bookmarklet which can be triggered by users configuring pixels on their page</p>
+  <p>When pressing this button on a page, this will make calls to a server endpoint that can receive the default parameters which can be subsequently used to create targeting cases.</p>
+
+  <a href="javascript:(function() { !function(y,l,d,r){if(y.YieldrTrackingObject=r,y[r]=y[r]||{data:{},set:function(name,value){this.data[name]=value}},!y[r].loaded){var s=l.createElement('script');s.async=!0,s.src=d,l.getElementsByTagName('head')[0].appendChild(s),y[r].loaded=!0}}(window,document,'//cdn.254a.com/static/y.js','y');y.set('advertiser_id', 123); y.domain = 'my.yieldr.com/preview'; y.track(); })()">Yieldr Pixel Preview</a>
+</body>
+</html>
