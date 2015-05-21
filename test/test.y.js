@@ -14,40 +14,6 @@ describe('y', function () {
     it('should be an object', function () {
         assert.typeOf(y, 'object');
     });
-    describe('event', function () {
-        it('should be defined', function () {
-            assert.isDefined(y.elem);
-        });
-        it('should execute when event triggers', function () {
-            var executed = false;
-            y.elem('a#test', 'click', function (element) {
-                executed = true;
-                assert.include(element.src, 'event=click');
-                assert.include(element.src, 'selector=' + encodeURIComponent('a#test'));
-            });
-
-            var event = document.createEvent('HTMLEvents');
-            event.initEvent('click');
-            document.getElementById('test').dispatchEvent(event); // click it!
-
-            assert.isTrue(executed);
-        });
-        it('should include element attributes', function () {
-            var executed = false;
-            y.elem('a#test', 'click', function (element) {
-                executed = true;
-                assert.include(element.src, 'event=click');
-                assert.include(element.src, 'selector=' + encodeURIComponent('a#test'));
-                assert.include(element.src, 'attr_id=test');
-                assert.include(element.src, 'attr_href=' + encodeURIComponent('#'));
-            }, ['id', 'href']);
-            var event = document.createEvent('HTMLEvents');
-            event.initEvent('click');
-            document.getElementById('test').dispatchEvent(event); // click it!
-
-            assert.isTrue(executed);
-        });
-    });
     describe('dl', function () {
         it('should be defined', function () {
             assert.isDefined(y.dl);
