@@ -43,7 +43,6 @@ describe('y', function () {
                 }
             };
             var elements = y.callback(response);
-            console.log(elements);
             assert.lengthOf(elements, 4);
         });
     })

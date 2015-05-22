@@ -1,0 +1,15 @@
+{
+    "username": "engineers3",
+    "key": "eM1Nqqzd2ZPQRgWy1tFX",
+    "test_path": "test/test.y.html",
+    "test_framework": "mocha",
+    "timeout": 30,
+    "browsers": [
+        {
+            "browser": "firefox",
+            "browser_version": "latest",
+            "os": "OS X",
+            "os_version": "Lion"
+        }
+    ]
+}
