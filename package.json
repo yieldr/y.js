@@ -13,10 +13,10 @@
     "grunt-contrib-jshint" : "~0.6.0",
     "grunt-contrib-uglify" : "~0.2.2",
     "grunt-contrib-watch"  : "~0.4.4",
-    "grunt-saucelabs"      : "~8.6.1",
     "grunt-mocha"          : "~0.4.11",
+    "grunt-saucelabs"      : "~8.6.1",
     "matchdep"             : "~0.1.2",
     "mocha"                : "~1.21.4",
-    "chai"                 : "~1.9.1"
+    "expect.js"            : "~0.3.1"
   }
 }
