@@ -22,8 +22,34 @@
   <script>mocha.setup('bdd')</script>
   <script src="test.y.js"></script>
   <script>
-    mocha.checkLeaks();
-    mocha.run();
+    window.onload = function () {
+
+      var runner = mocha.run(),
+          report = [];
+
+      runner.on('end', function(){
+        window.mochaResults = runner.stats;
+        window.mochaResults.reports = report;
+      });
+
+      runner.on(function(test, err){
+          var flatten = function(test){
+            var titles = [];
+            while (test.parent.title){
+              titles.push(test.parent.title);
+              test = test.parent;
+            }
+            return titles.reverse();
+          };
+          report.push({
+            name: test.title,
+            result: false,
+            message: err.message,
+            stack: err.stack,
+            titles: flatten(test)
+          });
+        });
+    }
   </script>
   <a style="display:none;" id="test" href="#">Test events</a>
 </body>

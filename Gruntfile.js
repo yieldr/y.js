@@ -3,10 +3,12 @@ module.exports = function(grunt) {
 
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
+  var pkg = grunt.file.readJSON('package.json');
+
   // Project configuration.
   grunt.initConfig({
     // Metadata.
-    pkg: grunt.file.readJSON('package.json'),
+    pkg: pkg,
     // Task configuration.
     concat: {
       dist: {
@@ -40,13 +42,55 @@ module.exports = function(grunt) {
     },
     mocha: {
       test: {
-        src: ['test/*.html'],
-        options: {
-          reporter: 'XUnit',
-          run: true
-        },
-        dest: './test/output/xunit.out'
+        src: ['test/*.html']
       },
+    },
+    connect: {
+      server: {
+        options: {
+          port: 9999,
+          hostname: '0.0.0.0',
+          protocol: 'http',
+          base: '.'
+        }
+      }
+    },
+    'saucelabs-mocha': {
+      all: {
+        options: {
+          testname: 'Mocha',
+          urls: [
+            'http://127.0.0.1:9999/test/test.y.html'
+            // 'http://127.0.0.1:9999/test/test.custom.html'
+          ],
+          build: pkg.version,
+          public: 'public',
+          sauceConfig: {
+            maxDuration: 30
+          },
+          browsers: [{
+            browserName: 'internet explorer',
+            version: '10.0',
+            platform: 'Windows 8'
+          },{
+            browserName: 'internet explorer',
+            version: '9.0',
+            platform: 'Windows 7'
+          },{
+            browserName: 'firefox',
+            version: '19',
+            platform: 'Windows XP'
+          },{
+            browserName: 'chrome',
+            version: '42.0',
+            platform: 'OS X 10.10'
+          },{
+            browserName: 'chrome',
+            version: '35.0',
+            platform: 'OS X 10.8'
+          }]
+        }
+      }
     },
     watch: {
       gruntfile: {
@@ -62,6 +106,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['mocha', 'concat', 'uglify']);
   grunt.registerTask('build', ['concat', 'uglify']);
-  grunt.registerTask('test', ['mocha']);
+  grunt.registerTask('test', ['connect', 'mocha', 'saucelabs-mocha']);
   grunt.registerTask('hint', ['jshint']);
 };
