@@ -42,7 +42,7 @@ module.exports = function(grunt) {
     },
     mocha: {
       test: {
-        src: ['test/*.html']
+        src: ['test/test.*.html']
       },
     },
     connect: {
@@ -60,13 +60,13 @@ module.exports = function(grunt) {
         options: {
           testname: 'Mocha',
           urls: [
-            'http://127.0.0.1:9999/test/test.y.html'
-            // 'http://127.0.0.1:9999/test/test.custom.html'
+            'http://127.0.0.1:9999/test/test.y.html',
+            'http://127.0.0.1:9999/test/test.custom.html'
           ],
           build: pkg.version,
           public: 'public',
           sauceConfig: {
-            maxDuration: 30
+            maxDuration: 60
           },
           browsers: [{
             browserName: 'internet explorer',
@@ -77,9 +77,21 @@ module.exports = function(grunt) {
             version: '9.0',
             platform: 'Windows 7'
           },{
+            browserName: 'internet explorer',
+            version: '8.0',
+            platform: 'Windows XP'
+          },{
             browserName: 'firefox',
             version: '19',
             platform: 'Windows XP'
+          },{
+            browserName: 'firefox',
+            version: '35.0',
+            platform: 'Windows 7'
+          },{
+            browserName: 'firefox',
+            version: '37.0',
+            platform: 'Windows 8'
           },{
             browserName: 'chrome',
             version: '42.0',
@@ -88,6 +100,10 @@ module.exports = function(grunt) {
             browserName: 'chrome',
             version: '35.0',
             platform: 'OS X 10.8'
+          },{
+            browserName: 'safari',
+            version: '8.0',
+            platform: 'OS X 10.10'
           }]
         }
       }
