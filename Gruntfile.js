@@ -32,6 +32,13 @@ module.exports = function(grunt) {
         },
         src: 'tag/tag.js',
         dest: 'tag/tag.min.js'
+      },
+      bookmarklet: {
+        options: {
+          quoteStyle: 1
+        },
+        src: 'bookmarklet/bookmarklet.js',
+        dest: 'bookmarklet/bookmarklet.min.js'
       }
     },
     jshint: {
