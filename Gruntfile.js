@@ -111,6 +111,12 @@ module.exports = function(grunt) {
             browserName: 'safari',
             version: '8.0',
             platform: 'OS X 10.10'
+          },{
+            browserName: 'iphone',
+            version: '8.2',
+            platform: 'OS X 10.10',
+            deviceName: 'iPhone Simulator',
+            deviceOrientation: 'portrait'
           }]
         }
       }
