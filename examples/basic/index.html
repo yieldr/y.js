@@ -33,6 +33,6 @@
     y.set("advertiser_id", 7);
   </script>
 
-  <a href="javascript:!function(){var a=window[window.YieldrTrackingObject]||null;a.callback=function(a){for(var b=a.data.cases,c=0;c<b.length;c++){var d=b[c],e=new XMLHttpRequest;e.open('GET','https://my.yieldr.com/api/case-test/'+d,!0),e.setRequestHeader('Authorization','Basic '+btoa('chucknorris:dontneedone')),e.send()}},a.track()}();">Yieldr | Pixel Test</a>
+  <a href="javascript:!function(){var a=window[window.YieldrTrackingObject];if(void 0!==a){var b=a.callback;a.callback=function(a){for(var c=a.data.cases,d=0;d<c.length;d++){var e=c[d],f=new XMLHttpRequest;f.open('GET','https://my.yieldr.com/api/case-test/'+e,!0),f.send()}this.callback=b},a.track()}}();">Yieldr | Pixel Test</a>
 </body>
 </html>
