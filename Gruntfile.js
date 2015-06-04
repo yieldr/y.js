@@ -12,13 +12,11 @@ module.exports = function(grunt) {
     // Task configuration.
     concat: {
       dist: {
-        options: {
-          process: function(src) {
-            return src.replace('master', 'v' + grunt.config.data.pkg.version);
-          }
-        },
         src: ['lib/{,*/}*.js'],
-        dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.js'
+        dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.js',
+        options: {
+          process: true
+        }
       }
     },
     uglify: {
@@ -35,7 +33,8 @@ module.exports = function(grunt) {
       },
       bookmarklet: {
         options: {
-          quoteStyle: 1
+          quoteStyle: 1,
+          banner: 'javascript:',
         },
         src: 'bookmarklet/bookmarklet.js',
         dest: 'bookmarklet/bookmarklet.min.js'
