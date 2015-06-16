@@ -103,6 +103,10 @@ module.exports = function(grunt) {
             version: '8.0',
             platform: 'OS X 10.10'
           },{
+            browserName: 'safari',
+            version: '5.1',
+            platform: 'OS X 10.6'
+          },{
             browserName: 'iphone',
             version: '8.2',
             platform: 'OS X 10.10',
