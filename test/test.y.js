@@ -57,4 +57,43 @@ describe('y', function () {
             expect(element.src).to.contain('foo=bar');
         });
     });
+    describe('stats', function () {
+        it('should be defined', function () {
+            expect(y.stats).not.to.be(undefined);
+        });
+        it('should be an object', function () {
+            expect(y.stats).to.be.an('object');
+        });
+        describe('set', function () {
+            it('should be a function', function () {
+                expect(y.stats.set).to.be.a('function');
+            });
+            it('should set a value', function () {
+                y.stats.set('foo', 'bar');
+                expect(y.stats.get('foo')).to.be('bar');
+            });
+        });
+        describe('incr', function () {
+            it('should start at one if called for the first time', function () {
+                y.stats.incr('counter')
+                expect(y.stats.get('counter')).to.be(1);
+            });
+            it('should keep incrementing the value on subsequent calls', function () {
+                y.stats.incr('counter');
+                expect(y.stats.get('counter')).to.be(2);
+            });
+        });
+        describe('push', function () {
+            it('should create an array the first time', function () {
+                y.stats.push('values', 1);
+                expect(y.stats.get('values')).to.contain(1);
+            });
+            it('should keep adding values to the array on subsequent calls', function () {
+                y.stats.push('values', 2);
+                expect(y.stats.get('values')).to.have.length(2);
+                expect(y.stats.get('values')).to.contain(1);
+                expect(y.stats.get('values')).to.contain(2);
+            });
+        });
+    });
 });
