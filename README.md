@@ -1,5 +1,9 @@
 # Yieldr JavaScript Tracker
 
+<a href="https://saucelabs.com/u/alexkalyvitis">
+  <img src="https://saucelabs.com/browser-matrix/alexkalyvitis.svg" alt="Sauce Test Status"/>
+</a>
+
 This library is being served to clients implementing the Yieldr tracking snippet. On a high level it defines a single JSON-P function responsible for performing actions based on the tracking server response.
 
 Before triggering a request to the remote tracking server, it collects information from the current document, using referrer, query parameters, cookies, sessions and so on.

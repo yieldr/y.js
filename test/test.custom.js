@@ -5,23 +5,21 @@
  */
 'use strict';
 
-var assert = chai.assert;
-
 describe('custom', function () {
     describe('yieldr', function () {
         it('should be defined', function () {
-            assert.isDefined(yieldr);
+            expect(yieldr).not.to.be(undefined);
         });
         describe('data', function () {
             it('should be defined', function () {
-                assert.isDefined(yieldr.data);
+                expect(yieldr.data).not.to.be(undefined);
             });
             it('should contain key "foo"', function () {
-                assert.property(yieldr.data, 'foo');
+                expect(yieldr.data).to.have.property('foo');
             });
             describe('foo', function () {
                 it('should have value "bar"', function () {
-                    assert.equal(yieldr.data.foo, "bar");
+                    expect(yieldr.data.foo).to.be('bar');
                 });
             });
         });

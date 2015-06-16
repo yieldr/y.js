@@ -5,31 +5,30 @@
  */
 'use strict';
 
-var assert = chai.assert;
-
 describe('y', function () {
     it('should be defined', function () {
-        assert.isDefined(y);
+        expect(y).not.to.be(undefined);
     });
     it('should be an object', function () {
-        assert.typeOf(y, 'object');
+        expect(y).to.be.an('object');
     });
     describe('dl', function () {
         it('should be defined', function () {
-            assert.isDefined(y.dl);
+            expect(y.dl).not.to.be(undefined);
+            expect(y.dl).to.be.a('function');
         });
         it('should gather data layer properties', function () {
             y.dl({a:{b:'x'}}, {foo: 'a.b', bar: 'z.y'}, false);
-            assert.property(y.data, 'foo');
-            assert.notProperty(y.data, 'bar'); // because 'z.y' doesn't exist.
+            expect(y.data).to.have.property('foo');
+            expect(y.data.bar).to.be(undefined); // because 'z.y' doesn't exist.
         });
     });
     describe('callback', function () {
         it('should be defined', function () {
-            assert.isDefined(y.callback);
+            expect(y.callback).not.to.be(undefined);
         })
         it('should be a function', function () {
-            assert.typeOf(y.callback, 'function');
+            expect(y.callback).to.be.a('function');
         })
         it('should place piggybacks', function () {
             var response = {
@@ -43,19 +42,58 @@ describe('y', function () {
                 }
             };
             var elements = y.callback(response);
-            assert.lengthOf(elements, 4);
+            expect(elements).to.have.length(4);
         });
     })
     describe('fire', function () {
         it('should be defined', function () {
-            assert.isDefined(y.fire);
+            expect(y.fire).not.to.be(undefined);
         });
         it('should be a function', function () {
-            assert.typeOf(y.fire, 'function');
+            expect(y.fire).to.be.a('function');
         });
         it('should place a script tag', function () {
             var element = y.fire({'foo': 'bar'});
-            assert.include(element.src, 'foo=bar');
+            expect(element.src).to.contain('foo=bar');
+        });
+    });
+    describe('stats', function () {
+        it('should be defined', function () {
+            expect(y.stats).not.to.be(undefined);
+        });
+        it('should be an object', function () {
+            expect(y.stats).to.be.an('object');
+        });
+        describe('set', function () {
+            it('should be a function', function () {
+                expect(y.stats.set).to.be.a('function');
+            });
+            it('should set a value', function () {
+                y.stats.set('foo', 'bar');
+                expect(y.stats.get('foo')).to.be('bar');
+            });
+        });
+        describe('incr', function () {
+            it('should start at one if called for the first time', function () {
+                y.stats.incr('counter')
+                expect(y.stats.get('counter')).to.be(1);
+            });
+            it('should keep incrementing the value on subsequent calls', function () {
+                y.stats.incr('counter');
+                expect(y.stats.get('counter')).to.be(2);
+            });
+        });
+        describe('push', function () {
+            it('should create an array the first time', function () {
+                y.stats.push('values', 1);
+                expect(y.stats.get('values')).to.contain(1);
+            });
+            it('should keep adding values to the array on subsequent calls', function () {
+                y.stats.push('values', 2);
+                expect(y.stats.get('values')).to.have.length(2);
+                expect(y.stats.get('values')).to.contain(1);
+                expect(y.stats.get('values')).to.contain(2);
+            });
         });
     });
 });
