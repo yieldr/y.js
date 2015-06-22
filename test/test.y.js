@@ -37,7 +37,10 @@ describe('y', function () {
                     cases: [1, 2, 3],
                     html: ['<img src="http://en.wikipedia.org/favicon.ico" />'],
                     script: ['http://code.jquery.com/jquery-1.11.0.min.js'],
-                    image: ['http://www.google.com/favicon.ico'],
+                    image: [
+                        'http://www.google.com/favicon.ico',
+                        '' // should not be placed
+                    ],
                     iframe: ['http://example.com/']
                 }
             };
