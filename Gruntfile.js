@@ -107,6 +107,10 @@ module.exports = function(grunt) {
             version: '5.1',
             platform: 'OS X 10.6'
           },{
+            browserName: 'opera',
+            platform: "Windows 7",
+            version: "11.64"
+          },{
             browserName: 'iphone',
             version: '8.2',
             platform: 'OS X 10.10',
