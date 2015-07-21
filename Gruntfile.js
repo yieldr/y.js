@@ -5,28 +5,72 @@ module.exports = function(grunt) {
 
   var pkg = grunt.file.readJSON('package.json');
 
+  var banner = "/**" +
+    "\n * Yieldr Javascript Tracker" +
+    "\n *" +
+    "\n * @version   <%= pkg.version %>" +
+    "\n * @copyright Yieldr Labs B.V." +
+    "\n * @author    <%= pkg.author %>" +
+    "\n * @license   <%= pkg.license %>" +
+    "\n */\n";
+
   // Project configuration.
   grunt.initConfig({
     // Metadata.
     pkg: pkg,
+
     // Task configuration.
-    concat: {
+    browserify: {
       dist: {
         src: ['lib/{,*/}*.js'],
+        dest: 'y.js',
+        options: {
+          banner: banner,
+          alias: {
+            ab: './lib/ab.js',
+            cookie: './lib/cookie.js',
+            history: './lib/history.js',
+            legacy: './lib/legacy.js',
+            mapper: './lib/mapper.js',
+            piggyback: './lib/piggyback.js',
+            query: './lib/query.js',
+            referrer: './lib/referrer.js',
+            session: './lib/session.js',
+            stats: './lib/stats.js',
+            yieldr: './lib/yieldr.js'
+          }
+        }
+      }
+    },
+    watch: {
+      files: ['lib/{,*/}*.js'],
+      tasks: ['browserify']
+    },
+    concat: {
+      dist: {
+        src: '<%= browserify.dist.dest %>',
         dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.js',
         options: {
-          process: true
+          process: function(src) {
+            return src.replace('__VERSION__', pkg.version);
+          }
         }
       }
     },
     uglify: {
       dist: {
         src: '<%= concat.dist.dest %>',
-        dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.min.js'
+        dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.min.js',
+        options: {
+          banner: banner
+        }
       },
       tag: {
         options: {
-          mangle: false
+          process: true,
+          mangle: {
+            except: ['y', 'l', 'd', 'r']
+          }
         },
         src: 'tag/tag.js',
         dest: 'tag/tag.min.js'
@@ -36,6 +80,14 @@ module.exports = function(grunt) {
       options: grunt.file.readJSON('.jshintrc'),
       lib_test: {
         src: ['lib/{,*/}*.js']
+      }
+    },
+    jsdoc: {
+      dist: {
+        src: ['lib/*.js', 'test/*.js'],
+        options: {
+          destination: 'doc'
+        }
       }
     },
     mocha: {
@@ -59,7 +111,7 @@ module.exports = function(grunt) {
           testname: 'Mocha',
           urls: [
             'http://127.0.0.1:9999/test/test.y.html',
-            'http://127.0.0.1:9999/test/test.custom.html'
+            // 'http://127.0.0.1:9999/test/test.custom.html'
           ],
           build: pkg.version,
           public: 'public',
@@ -70,47 +122,47 @@ module.exports = function(grunt) {
             browserName: 'internet explorer',
             version: '10.0',
             platform: 'Windows 8'
-          },{
+          }, {
             browserName: 'internet explorer',
             version: '9.0',
             platform: 'Windows 7'
-          },{
+          }, {
             browserName: 'internet explorer',
             version: '8.0',
             platform: 'Windows XP'
-          },{
+          }, {
             browserName: 'firefox',
             version: '19',
             platform: 'Windows XP'
-          },{
+          }, {
             browserName: 'firefox',
             version: '35.0',
             platform: 'Windows 7'
-          },{
+          }, {
             browserName: 'firefox',
             version: '37.0',
             platform: 'Windows 8'
-          },{
+          }, {
             browserName: 'chrome',
             version: '42.0',
             platform: 'OS X 10.10'
-          },{
+          }, {
             browserName: 'chrome',
             version: '35.0',
             platform: 'OS X 10.8'
-          },{
+          }, {
             browserName: 'safari',
             version: '8.0',
             platform: 'OS X 10.10'
-          },{
+          }, {
             browserName: 'safari',
             version: '5.1',
             platform: 'OS X 10.6'
-          },{
+          }, {
             browserName: 'opera',
             platform: "Windows 7",
             version: "11.64"
-          },{
+          }, {
             browserName: 'iphone',
             version: '8.2',
             platform: 'OS X 10.10',
@@ -119,21 +171,13 @@ module.exports = function(grunt) {
           }]
         }
       }
-    },
-    watch: {
-      gruntfile: {
-        files: '<%= jshint.gruntfile.src %>',
-        tasks: ['jshint:gruntfile']
-      },
-      lib_test: {
-        files: '<%= jshint.lib_test.src %>',
-        tasks: ['jshint:lib_test', 'qunit']
-      }
     }
   });
 
-  grunt.registerTask('default', ['mocha', 'concat', 'uglify']);
-  grunt.registerTask('build', ['concat', 'uglify']);
+  grunt.registerTask('default', ['browserify:dist', 'concat', 'uglify', 'mocha']);
+  grunt.registerTask('build', ['browserify:dist', 'concat', 'uglify']);
   grunt.registerTask('test', ['connect', 'mocha', 'saucelabs-mocha']);
   grunt.registerTask('hint', ['jshint']);
+  grunt.registerTask('doc', ['jsdoc']);
+
 };

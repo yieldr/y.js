@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Yieldr Pixel - v2</title>
+</head>
+<body>
+  <h1>Example using v2</h1>
+  <p>In this example we'll call the second version of y.js</p>
+  <p>This version is built using modules and compiled with browserify to take full advantage of emerging tools and gain the ability to test 100% of our codebase.</p>
+  <script type="text/javascript">
+    /**
+     *
+     *
+     * @param  {Window}   y
+     * @param  {Document} i
+     * @param  {String}   e
+     * @param  {String}   l
+     * @param  {String}   d
+     * @param  {String}   r
+     */
+    (function(y, i, e, l, d, r) {
+      // Stores the name of the tracking object. This is used when the tracking
+      // object is renamed due to conflicts.
+      y.YieldrTrackingObject = l;
+      // Create an array to act as a queue. This array will hold all the tracking
+      // commands set by the users until y.js loads replaces the queue with the
+      // actual object after it executes it.
+      y[l] = y[l] || [];
+      // Load this tag only once.
+      if (!y[l].loaded) {
+        // These methods will be available to the queue. Calling _yldr.method(arg)
+        // will behave as if _yldr.push(['method', arg]) was called instead.
+        d = ['set', 'map', 'fire', 'track', 'remote'];
+        r = function(method) {
+          return function() {
+            var a = Array.prototype.slice.call(arguments);
+            a.unshift(method)
+            y[l].push(a);
+          };
+        };
+        for (var c = 0; c < d.length; c++) {
+          y[l][d[c]] = r(d[c]);
+        }
+        // Create the element that will load y.js and place it as the last child of
+        // the document.
+        var elem = i.createElement("script");
+        elem.async = true;
+        elem.src = e;
+        i.getElementsByTagName('body')[0].appendChild(elem);
+        // Mark the object as loaded so we don't load it again.
+        y[l].loaded = true;
+        // Save the tag version to be able to keep backward compatibility among
+        // upgraded versions.
+        y[l].version = 'v2';
+      }
+    })(window, document, "/y.js", "_y");
+
+    _y.set('advertiser_id', 7);
+    _y.set('country', 'GR');
+    _y.set('bar', 'abc');
+    _y.set('baz', new Date().toISOString().slice(0, 10));
+    // _y.map();
+    _y.remote('y.254a.com');
+    _y.track();
+    // _y.fire({foo: 'bar'});
+  </script>
+</body>
+</html>

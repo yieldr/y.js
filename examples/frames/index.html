@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Yieldr Pixel - Frames Example</title>
+</head>
+<body>
+  <h1>Frames Example</h1>
+  <p>In this example we'll call y.js from both the parent window and inside an iframe</p>
+
+  <script type = "text/javascript">
+    (function(y, l, d, r) {
+      y['YieldrTrackingObject'] = r;
+      y[r] = y[r] || {
+        data: {},
+        set: function(name, value) {
+          this.data[name] = value;
+        }
+      };
+      if (!y[r].loaded) {
+        var s = l.createElement("script");
+        s.async = true;
+        s.src = d;
+        l.getElementsByTagName("head")[0].appendChild(s);
+        y[r].loaded = true;
+      }
+    })(window, document, "/y.js", "yldr");
+
+    yldr.set("advertiser_id", 7);
+  </script>
+
+  <iframe src="http://advertiser.org/examples/basic/index.html"></iframe>
+</body>
+</html>
