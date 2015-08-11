@@ -1640,14 +1640,16 @@ Cookie.prototype.get = function(name) {
     return '';
 };
 
-Cookie.prototype.set = function(name, value, extDays) {
-    var date = new Date();
+Cookie.prototype.set = function(name, value, extDays, date) {
+    date = date || new Date();
     date.setDate(date.getDate() + extDays);
     this.document.cookie = name + "=" + encodeURI(value) + ";expires=" + date + ";domain=" + this.hostname + ";path=/";
 };
 
 },{}],"history":[function(require,module,exports){
 'use strict';
+
+var _ = require('underscore');
 
 /**
  * Stores the users referrer history.
@@ -1681,7 +1683,7 @@ var History = module.exports = function(cookie, cookieName) {
  */
 History.prototype.get = function () {
     var cookie = this.cookie.get(this.cookieName);
-    return cookie ? [] : cookie.split('|');
+    return _.compact(cookie.split('|'));
 };
 
 /**
@@ -1693,7 +1695,7 @@ History.prototype.set = function (history) {
     this.cookie.set(this.cookieName, history.join('|'), 30);
 };
 
-},{}],"legacy":[function(require,module,exports){
+},{"underscore":2}],"legacy":[function(require,module,exports){
 'use strict';
 
 var _ = require('underscore');
@@ -1709,6 +1711,21 @@ var rename = {
 var ignore = ['_elem'];
 
 /**
+ * Checks the version of a tag given an async queue.
+ *
+ * @param  {Array|Object} queue
+ * @return {String}
+ */
+function checkVersion(queue) {
+    if (!_.isUndefined(queue.version)) {
+        return queue.version;
+    } else if (_.isArray(queue)) {
+        return 'v2';
+    }
+    return 'v1';
+}
+
+/**
  * Checks whether a queue is defined in a legacy manner and transforms it to
  * work with tag version 2.
  *
@@ -1719,29 +1736,26 @@ module.exports.makeCompatible = function(queue) {
 
     var compatible = [];
 
-    if (_.isArray(queue)) {
-        compatible.version = queue.version;
-    } else {
-        compatible.version = 'v1';
-    }
-
-    switch (compatible.version) {
+    switch (checkVersion(queue)) {
         case 'v1':
             _.each(queue.data, function(value, key) {
                 if (!_.contains(ignore, key)) {
                     if (_.has(rename, key)) {
                         compatible.push(_.union([rename[key]], value));
+                    } else {
+                        compatible.push(['set', key, value]);
                     }
-                    compatible.push(['set', key, value]);
                 }
             });
+            if (_.has(queue, 'domain')) {
+                compatible.push(['remote', queue.domain]);
+            }
+            compatible.push(['track']);
             break;
         case 'v2':
             compatible = queue;
             break;
     }
-
-    compatible.push(['track']);
 
     return compatible;
 };
@@ -1749,13 +1763,87 @@ module.exports.makeCompatible = function(queue) {
 },{"underscore":2}],"mapper":[function(require,module,exports){
 'use strict';
 
-var Mapper = function () {};
+var _ = require('underscore');
 
-Mapper.prototype.map = function (object) {
+/**
+ * Picks elements from the object as defined by the mapping.
+ *
+ * @param {Object}  object
+ * @param {Object}  mapping
+ * @param {Boolean} all
+ * @return {Object}
+ */
+module.exports.map = function(object, mapping, all) {
+    return flatten(map(object, mapping, all), '', {});
+}
 
-};
+/**
+ * Maps values from an object based on a mapping.
+ *
+ * E.g:
+ *
+ *     map({a: {b: {c: "x"}}}, {foo: "a.b.c"}); // {foo: "x"}
+ *
+ * @param  {Object} object
+ * @param  {Object} mapping
+ * @return {Boolean}
+ */
+function map(object, mapping, all) {
+    var mapped = {};
+    _.each(mapping, function(value, key) {
+        mapped[key] = extract(object, _.compact(value.split('.')));
+    });
+    if (all) {
+        _.each(object, function(value, key) {
+            mapped[key] = value;
+        });
+    }
+    return mapped;
+}
 
-},{}],"piggyback":[function(require,module,exports){
+/**
+ * Flattens a nested array into a single level object containing keys and
+ * scalar values (numbers, strings, etc).
+ *
+ * @param  {*}      object
+ * @param  {String} prefix
+ * @return {Object}
+ */
+function flatten(object, prefix, flat) {
+    flat = flat || {};
+    prefix = prefix || '';
+    if (_.isFunction(object)) {
+        flatten(object(), prefix, flat);
+    } else if (_.isObject(object)) {
+        prefix = (prefix) ? prefix + '_' : '';
+        _.each(object, function(value, key) {
+            flatten(value, prefix + key, flat);
+        });
+    } else {
+        flat[prefix] = object;
+    }
+    return flat;
+}
+
+/**
+ * Extract a value by recursively visiting the path on each property of the
+ * object.
+ *
+ *      extract({a: {b: {c: "x"}}}, ["a", "b", "c"]) // "x"
+ *
+ * @param  {Object} object
+ * @param  {Array}  path
+ * @return {String}
+ */
+function extract(object, path) {
+    if (object && _.size(path) > 0) {
+        var key = _.head(path);
+        return extract(object[key], _.tail(path));
+    }
+    return object;
+}
+
+},{"underscore":2}],"piggyback":[function(require,module,exports){
 'use strict';
 
 /**
@@ -1883,24 +1971,24 @@ var _ = require('underscore');
 /**
  * Constructor.
  *
- * @param {Query} url
+ * @param {Location} location
  */
-var Query = module.exports = function(url) {
+var Query = module.exports = function(location) {
 
     /**
      * @type {Object}
      */
     this.params = {};
 
-    this.init(url);
+    this.init(location);
 };
 
 /**
  * Parses the url for query parameters.
  *
- * @param  {String} url
+ * @param  {Location} location
  */
-Query.prototype.init = function(url) {
+Query.prototype.init = function(location) {
     this.params = _.chain(location.search.slice(1).split('&'))
         .map(function(item) {
             if (item) {
@@ -1910,7 +1998,7 @@ Query.prototype.init = function(url) {
         .compact()
         .object()
         .value();
-}
+};
 
 /**
  * Returns all the parameters present in the query string.
@@ -1984,7 +2072,7 @@ var Referrer = module.exports = function() {
  */
 Referrer.prototype.getName = function(url) {
     _.each(this.map, function(pattern, name) {
-        if (url.search(pattern) > -1) {
+        if (url.search(pattern) !== -1) {
             return name;
         }
     });
@@ -2020,6 +2108,8 @@ Referrer.prototype.cleanUrl = function(url) {
 },{"underscore":2}],"session":[function(require,module,exports){
 'use strict';
 
+var _ = require('underscore');
+
 /**
  * Constructor.
  *
@@ -2054,7 +2144,7 @@ var Session = module.exports = function(window, cookie) {
 Session.prototype.init = function() {
 
     this.id = this.get('_yldr_session');
-    this.ts = this.get('_yldr_session_ts') || Date.now() / 1000 | 0;
+    this.ts = this.get('_yldr_session_ts') || _.now() / 1000 | 0;
     this.sfq = 1 + (+this.get('_yldr_session_fq')) || 1;
 
     this.snr = +this.cookie.get('_yldr_session_nr') || 1,
@@ -2121,7 +2211,7 @@ Session.prototype.userEngagement = function() {
  * @return {Number}
  */
 Session.prototype.sessionEngagement = function() {
-    return Math.log(this.sfq) / (Math.log((Date.now() / 1000 | 0) - this.ts));
+    return Math.log(this.sfq) / (Math.log((_.now() / 1000 | 0) - this.ts));
 };
 
 /**
@@ -2159,7 +2249,7 @@ Session.prototype.uuid = function() {
         + hex(rand(48), 12);
 }
 
-},{}],"stats":[function(require,module,exports){
+},{"underscore":2}],"stats":[function(require,module,exports){
 'use strict';
 
 /**
@@ -2308,7 +2398,7 @@ var Yieldr = module.exports = function(window, queue) {
     /**
      * @type {Query}
      */
-    this.query = new Query(this.document.location.href);
+    this.query = new Query(this.document.location);
 
     /**
      * @type {Object}
@@ -2336,7 +2426,8 @@ var Yieldr = module.exports = function(window, queue) {
     this.alias = window.YieldrTrackingObject;
 
     this.init();
-    this.apply(queue) ; // apply the queue as defined in the tag.
+    this.apply(queue); // apply the queue as defined in the tag.
+    this.listen();
 };
 
 /**
@@ -2367,11 +2458,7 @@ Yieldr.prototype.set = function(key, value) {
  * @param {Boolean} all
  */
 Yieldr.prototype.map = function(object, mapping, all) {
-    mapping || (mapping = {});
-    all || (all = false);
-    var data = flatten(map(object, mapping, all));
-    y.data = merge([y.data, data]);
-    console.info('Function not implemented.')
+    this.data = mapper.map(object, mapping || {}, all || false);
 };
 
 /**
@@ -2396,17 +2483,18 @@ Yieldr.prototype.callback = function(response) {
 
     if (response.status === 'success') {
         this.stats.set('cases', response.data.cases || response.data.case_ids);
-        _.each(this.piggyback.supportedTypes, function(type) {
-            _.each(response.data[type] || [], function(piggyback) {
-                var element = this.piggyback.create(type, piggyback);
-                elements.push(body.appendChild(element));
-                this.stats.push('piggybacks', piggyback);
-            }, this);
+        _.each(response.data, function(piggybacks, type) {
+            if (_.contains(this.piggyback.supportedTypes, type)) {
+                _.each(_.compact(piggybacks), function(piggyback) {
+                    var element = this.piggyback.create(type, piggyback);
+                    elements.push(body.appendChild(element));
+                    this.stats.push('piggybacks', piggyback);
+                }, this);
+            }
         }, this);
     }
 
     this.stats.incr('callback');
-    this.stats.send(this.window);
 
     return elements;
 };
@@ -2426,7 +2514,7 @@ Yieldr.prototype.fire = function(params) {
         body = this.document.getElementsByTagName('body')[0],
         query = [];
 
-    _.each(params, function (value, key) {
+    _.each(params, function(value, key) {
         if (!_.isUndefined(value)) {
             query.push(encode(key) + '=' + encode(value));
         }
@@ -2488,15 +2576,32 @@ Yieldr.prototype.track = function() {
 /**
  * Applies the queue.
  *
- * @param  {Array} queue
+ * @param {Array} queue
  */
 Yieldr.prototype.apply = function(queue) {
-    _.each(queue, function (args) {
+    _.each(queue, function(args) {
         var func = _.head(args);
         if (_.isFunction(this[func])) {
             this[func].apply(this, _.tail(args));
         }
     }, this);
+};
+
+/**
+ * Listens for messages and responds with statistics.
+ */
+Yieldr.prototype.listen = function() {
+    var self = this,
+        stats = self.stats;
+    if (this.window.addEventListener) {
+        this.window.addEventListener('message', function(event) {
+            stats.set('y', true);
+            stats.set('version', self.version);
+            stats.set('domain', self.url);
+            stats.set('alias', self.alias);
+            event.source.postMessage(stats.all(), event.origin)
+        });
+    }
 };
 
 },{"ab":"ab","cookie":"cookie","history":"history","legacy":"legacy","mapper":"mapper","piggyback":"piggyback","query":"query","referrer":"referrer","session":"session","stats":"stats","underscore":2}]},{},["ab","cookie","history",1,"legacy","mapper","piggyback","query","referrer","session","stats","yieldr"]);

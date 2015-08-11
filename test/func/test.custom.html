@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>y.js - Test Suite</title>
+  <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
+</head>
+<body>
+  <div id="mocha"></div>
+  <script type="text/javascript">
+    (function(y, l, r) {
+      y['YieldrTrackingObject'] = r;
+      y[r] = y[r] || {
+        data: {},
+        domain: 'localhost',
+        set: function(name, value) {
+          this.data[name] = value;
+        }
+      };
+    })(window, document, "yieldr");
+
+    yieldr.set("foo", "bar");
+  </script>
+  <script src="../../node_modules/expect.js/index.js"></script>
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="../../y.js"></script>
+  <script src="test.custom.js"></script>
+  <script>
+    window.onload = function() {
+
+      var runner = mocha.run(),
+        report = [];
+
+      runner.on('end', function() {
+        window.mochaResults = runner.stats;
+        window.mochaResults.reports = report;
+      });
+
+      runner.on(function(test, err) {
+        var flatten = function(test) {
+          var titles = [];
+          while (test.parent.title) {
+            titles.push(test.parent.title);
+            test = test.parent;
+          }
+          return titles.reverse();
+        };
+        report.push({
+          name: test.title,
+          result: false,
+          message: err.message,
+          stack: err.stack,
+          titles: flatten(test)
+        });
+      });
+    }
+  </script>
+</body>
+</html>

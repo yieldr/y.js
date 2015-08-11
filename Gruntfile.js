@@ -67,10 +67,12 @@ module.exports = function(grunt) {
       },
       tag: {
         options: {
-          process: true,
           mangle: {
-            except: ['y', 'l', 'd', 'r']
-          }
+            except: ['y', 'i', 'e', 'l', 'd', 'r']
+          },
+          footer: "\n" +
+            "\n_yldr.set(<key>, <value>);" +
+            "\n_yldr.track();"
         },
         src: 'tag/tag.js',
         dest: 'tag/tag.min.js'
@@ -79,24 +81,36 @@ module.exports = function(grunt) {
     jshint: {
       options: grunt.file.readJSON('.jshintrc'),
       lib_test: {
-        src: ['lib/{,*/}*.js']
+        src: [
+          'lib/{,*/}*.js',
+        ]
       }
     },
     jsdoc: {
       dist: {
-        src: ['lib/*.js', 'test/*.js'],
+        src: ['lib/*.js'],
         options: {
           destination: 'doc'
         }
       }
     },
+    mochaTest: {
+      dist: {
+        options: {
+          reporter: 'spec'
+        },
+        src: ['test/unit/test.*.js']
+      }
+    },
     mocha: {
-      test: {
-        src: ['test/test.*.html']
-      },
+      dist: {
+        src: [
+          'test/func/test.*.html'
+        ]
+      }
     },
     connect: {
-      server: {
+      dist: {
         options: {
           port: 9999,
           hostname: '0.0.0.0',
@@ -106,12 +120,11 @@ module.exports = function(grunt) {
       }
     },
     'saucelabs-mocha': {
-      all: {
+      dist: {
         options: {
           testname: 'Mocha',
           urls: [
-            'http://127.0.0.1:9999/test/test.y.html',
-            // 'http://127.0.0.1:9999/test/test.custom.html'
+            'http://127.0.0.1:9999/test/func/test.y.html'
           ],
           build: pkg.version,
           public: 'public',
@@ -176,7 +189,9 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['browserify:dist', 'concat', 'uglify', 'mocha']);
   grunt.registerTask('build', ['browserify:dist', 'concat', 'uglify']);
-  grunt.registerTask('test', ['connect', 'mocha', 'saucelabs-mocha']);
+  grunt.registerTask('test', ['mochaTest', 'mocha', 'connect', 'saucelabs-mocha']);
+  grunt.registerTask('test:unit', ['mochaTest']);
+  grunt.registerTask('test:func', ['mocha']);
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('doc', ['jsdoc']);
 

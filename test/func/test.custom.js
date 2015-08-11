@@ -1,8 +1,3 @@
-/**
- * Yieldr JavaScript Tracker - Test Suite
- *
- * @author Alex Kalyvitis <alex.kalyvitis@yieldr.com>
- */
 'use strict';
 
 describe('custom', function () {

@@ -1,8 +1,3 @@
-/**
- * Yieldr JavaScript Tracker - Test Suite
- *
- * @author Alex Kalyvitis <alex.kalyvitis@yieldr.com>
- */
 'use strict';
 
 describe('y', function () {
@@ -10,15 +5,15 @@ describe('y', function () {
         expect(y).not.to.be(undefined);
     });
     it('should be an object', function () {
-        expect(y).to.be.an('object');
+        expect(y).to.be.a('object');
     });
-    describe('dl', function () {
+    describe('map', function () {
         it('should be defined', function () {
-            expect(y.dl).not.to.be(undefined);
-            expect(y.dl).to.be.a('function');
+            expect(y.map).not.to.be(undefined);
+            expect(y.map).to.be.a('function');
         });
-        it('should gather data layer properties', function () {
-            y.dl({a:{b:'x'}}, {foo: 'a.b', bar: 'z.y'}, false);
+        it('should map an object', function () {
+            y.map({a:{b:'x'}}, {foo: 'a.b', bar: 'z.y'}, false);
             expect(y.data).to.have.property('foo');
             expect(y.data.bar).to.be(undefined); // because 'z.y' doesn't exist.
         });
@@ -35,13 +30,13 @@ describe('y', function () {
                 status: 'success',
                 data: {
                     cases: [1, 2, 3],
-                    html: ['<img src="http://en.wikipedia.org/favicon.ico" />'],
+                    html: ['<img src="http://placehold.it/1x1" />'],
                     script: ['http://code.jquery.com/jquery-1.11.0.min.js'],
                     image: [
-                        'http://www.google.com/favicon.ico',
+                        'http://placehold.it/1x1',
                         '' // should not be placed
                     ],
-                    iframe: ['http://example.com/']
+                    iframe: ['http://example.org']
                 }
             };
             var elements = y.callback(response);
