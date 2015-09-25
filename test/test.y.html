@@ -32,7 +32,7 @@
         window.mochaResults.reports = report;
       });
 
-      runner.on(function(test, err){
+      runner.on('fail', function(test, err){
           var flatten = function(test){
             var titles = [];
             while (test.parent.title){
