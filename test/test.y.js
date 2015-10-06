@@ -23,6 +23,21 @@ describe('y', function () {
             expect(y.data.bar).to.be(undefined); // because 'z.y' doesn't exist.
         });
     });
+    describe('ab', function () {
+        it('should be defined', function () {
+            expect(y.ab).not.to.be(undefined);
+            expect(y.ab).to.be.a('function');
+        });
+        it('should assign a group (a/b) if called without arguments', function () {
+            var group = y.ab();
+            expect(['a', 'b'].indexOf(group) !== -1).to.be.ok();
+        });
+        it('should assign a group (x/y/z) if called with arguments', function () {
+            var groups = {x: 1, y: 2, z: 1};
+            var group = y.ab(groups);
+            expect(['x', 'y', 'z'].indexOf(group) !== -1).to.be.ok();
+        });
+    })
     describe('callback', function () {
         it('should be defined', function () {
             expect(y.callback).not.to.be(undefined);

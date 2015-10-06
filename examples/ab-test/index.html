@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Yieldr Pixel - Advanced A/B Testing</title>
+</head>
+<body>
+  <h1>Advanced A/B Testing</h1>
+  <p>In this example it is demonstrated how you can create advanced control groups of your users</p>
+  <pre><code>y.set("_ab", [{x: 1, y: 5, z: 0.5}]);</code></pre>
+  <p>Using this setup <code>y.js</code> will create three control groups (x, y and z) which have a probability distribution of 1, 5 and 0.5 respectively. The probability of each group affects the chances of the particular group to be randomly selected.</p>
+  <p>If <code>"_ab"</code> was not explicitly set, it will default to <code>{a: 0.5, b: 0.5}</code>.</p>
+
+  <script type = "text/javascript">
+    (function(y, l, d, r) {
+      y['YieldrTrackingObject'] = r;
+      y[r] = y[r] || {
+        data: {},
+        set: function(name, value) {
+          this.data[name] = value;
+        }
+      };
+      if (!y[r].loaded) {
+        var s = l.createElement("script");
+        s.async = true;
+        s.src = d;
+        l.getElementsByTagName("head")[0].appendChild(s);
+        y[r].loaded = true;
+      }
+    })(window, document, "../../lib/y.js", "y");
+
+    y.set("advertiser_id", 7);
+    y.set("_ab", [{x: 1, y: 5, z: 0.5}]);
+  </script>
+</body>
+</html>

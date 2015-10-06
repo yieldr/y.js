@@ -22,7 +22,10 @@ module.exports = function(grunt) {
     uglify: {
       dist: {
         src: '<%= concat.dist.dest %>',
-        dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.min.js'
+        dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.min.js',
+        options: {
+          preserveComments: 'some'
+        }
       },
       tag: {
         options: {
@@ -44,12 +47,21 @@ module.exports = function(grunt) {
       },
     },
     connect: {
-      server: {
+      test: {
         options: {
           port: 9999,
           hostname: '0.0.0.0',
           protocol: 'http',
           base: '.'
+        }
+      },
+      serve: {
+        options: {
+          port: 9999,
+          hostname: '0.0.0.0',
+          protocol: 'http',
+          base: '.',
+          keepalive: true
         }
       }
     },
@@ -104,8 +116,8 @@ module.exports = function(grunt) {
             platform: 'OS X 10.10'
           },{
             browserName: 'safari',
-            version: '5.1',
-            platform: 'OS X 10.6'
+            version: '6.0',
+            platform: 'OS X 10.8'
           },{
             browserName: 'opera',
             platform: "Windows 7",
@@ -134,6 +146,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['mocha', 'concat', 'uglify']);
   grunt.registerTask('build', ['concat', 'uglify']);
-  grunt.registerTask('test', ['connect', 'mocha', 'saucelabs-mocha']);
+  grunt.registerTask('test', ['connect:test', 'mocha', 'saucelabs-mocha']);
+  grunt.registerTask('serve', ['connect:serve']);
   grunt.registerTask('hint', ['jshint']);
 };
