@@ -36,11 +36,6 @@ describe('y', function () {
             var groups = {x: 1, y: 2, z: 1};
             var group = y.ab(groups);
             expect(['x', 'y', 'z'].indexOf(group) !== -1).to.be.ok();
-            for (var i = 0; i < 5; i++) {
-                // Subsequent calls with the same distribution should not change
-                // the cookie.
-                expect(y.ab(groups)).to.equal(group);
-            };
         });
     })
     describe('callback', function () {

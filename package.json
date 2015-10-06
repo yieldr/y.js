@@ -1,10 +1,10 @@
 {
   "name": "y",
-  "version": "1.1.4",
-  "homepage": "yieldr.com",
-  "author": {
-    "name": "Alex Kalyvitis"
-  },
+  "version": "1.2.0-n",
+  "author": "Alex Kalyvitis <alex.kalyvitis@yieldr.com>",
+  "license": "MIT",
+  "homepage": "http://github.com/yieldr/y.js",
+  "repository": "https://github.com/yieldr/y.js.git",
   "dependencies": {},
   "devDependencies": {
     "grunt"                : "~0.4.5",
