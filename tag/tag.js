@@ -1,16 +1,18 @@
-(function(y, l, d, r) {
-  y['YieldrTrackingObject'] = r;
-  y[r] = y[r] || {
+(function(y, i, e, l, d, r) {
+  y.YieldrTrackingObject = l;
+  y[l] = y[l] || {
     data: {},
     set: function(name, value) {
       this.data[name] = value;
     }
   };
-  if (!y[r].loaded) {
-    var s = l.createElement("script");
-    s.async = true;
-    s.src = d;
-    l.getElementsByTagName("head")[0].appendChild(s);
-    y[r].loaded = true;
+  if (!y[l].loaded) {
+    var t = "script";
+    d = i.createElement(t);
+    d.src = i.location.protocol + e;
+    d.async = true;
+    r = i.getElementsByTagName(t)[0];
+    r.parentNode.insertBefore(d, r);
+    y[l].loaded = true;
   }
 })(window, document, "//cdn.254a.com/static/n.js", "y");

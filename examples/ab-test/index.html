@@ -12,21 +12,22 @@
   <p>Using this setup <code>y.js</code> will create three control groups (x, y and z) which have a probability distribution of 1, 5 and 0.5 respectively. The probability of each group affects the chances of the particular group to be randomly selected.</p>
   <p>If <code>"_ab"</code> was not explicitly set, it will default to <code>{a: 0.5, b: 0.5}</code>.</p>
 
-  <script type = "text/javascript">
-    (function(y, l, d, r) {
-      y['YieldrTrackingObject'] = r;
-      y[r] = y[r] || {
+  <script type="text/javascript">
+    (function(y, i, e, l, d, r) {
+      y.YieldrTrackingObject = l;
+      y[l] = y[l] || {
         data: {},
         set: function(name, value) {
           this.data[name] = value;
         }
       };
-      if (!y[r].loaded) {
-        var s = l.createElement("script");
-        s.async = true;
-        s.src = d;
-        l.getElementsByTagName("head")[0].appendChild(s);
-        y[r].loaded = true;
+      if (!y[l].loaded) {
+        d = i.createElement("script");
+        d.src = i.location.protocol + e;
+        d.async = true;
+        r = i.getElementsByTagName("script")[0];
+        r.parentNode.insertBefore(d, r);
+        y[l].loaded = true;
       }
     })(window, document, "../../lib/y.js", "y");
 

@@ -5,6 +5,11 @@ module.exports = function(grunt) {
 
   var pkg = grunt.file.readJSON('package.json');
 
+  var banner = '/*!\n' +
+               ' * y.v<%= pkg.version %>.js\n' +
+               ' * Copyright (c) <%= grunt.template.today("yyyy") %> Yieldr Labs B.V.\n' +
+               ' */\n';
+
   // Project configuration.
   grunt.initConfig({
     // Metadata.
@@ -15,7 +20,8 @@ module.exports = function(grunt) {
         src: ['lib/{,*/}*.js'],
         dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.js',
         options: {
-          process: true
+          process: true,
+          banner: banner
         }
       }
     },
@@ -24,7 +30,7 @@ module.exports = function(grunt) {
         src: '<%= concat.dist.dest %>',
         dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.min.js',
         options: {
-          preserveComments: 'some'
+          banner: banner
         }
       },
       tag: {
